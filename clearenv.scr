@@ -1,0 +1,38 @@
+echo ============================================================
+echo Wiping x-loader, u-boot and environment from nand
+echo ============================================================
+setenv bootfile
+setenv androidargs 
+setenv bootargs 
+setenv bootcmd 
+setenv bootdelay
+setenv console 
+setenv ethaddr
+setenv gatewayip 
+setenv ipaddr
+setenv mmcargs 
+setenv mmcboot
+setenv netmask
+setenv preboot
+setenv serverip 
+setenv loadaddr
+setenv usbtty 
+setenv vram 
+setenv dvimode 
+setenv defaultdisplay 
+setenv mmcroot 
+setenv mmcrootfstype 
+setenv nandroot 
+setenv nandrootfstype 
+setenv nandargs 
+setenv loadbootscript
+setenv bootscript
+setenv loaduimage
+setenv nandboot
+setenv bootkernel
+setenv bootkernel_1
+saveenv
+nandecc hw 
+nand erase 0x0 0x80000 
+nandecc sw 
+nand erase 0x80000 0x160000 

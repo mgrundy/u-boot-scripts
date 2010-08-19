@@ -1,0 +1,14 @@
+echo setenv testkern 'mmcinit;fatload mmc 0:1 0x80000000 uImage;fatload mmc 0:1 0x81600000 ramdisk.gz;bootm 0x80000000'
+setenv mmcboot 'mmcinit;fatload mmc 0:1 0x80000000 uImage;fatload mmc 0:1 0x81600000 ramdisk.gz;bootm 0x80000000'
+setenv bootargs 'console=ttyS2,115200n8 root=/dev/ram0 initrd=0x81600000 rw rootwait rootdelay=1 kgdboc=ttyS2,115200n8 usbcore.autosuspend=-1 8250.nr_uarts=6 printk.time=1'
+echo setenv bootargs 'console=ttyS2,115200n8 root=/dev/mmcblk0p2 rw rootwait rootdelay=1 kgdboc=ttyS2,115200n8 usbcore.autosuspend=-1 8250.nr_uarts=6 printk.time=1'
+echo ============================================================
+echo Running the Ram and Nand tests 
+diag memory RAMtest
+diagnose memory nand
+echo ============================================================
+echo Run the ITBOK tests now. When you exit, the test kernel
+echo will boot and then run bug_test_mistral.sh
+echo ============================================================
+itbok
+

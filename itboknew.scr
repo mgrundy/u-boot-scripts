@@ -1,0 +1,48 @@
+echo ============================================================
+echo Running initial setup
+echo ============================================================
+
+
+# This version requires the mistral test root fs to be loaded on the second partition of the 
+# itbok sd-card. 
+#setenv bootargs 'console=ttyS2,115200n8 root=/dev/mmcblk0p2 rw rootwait rootdelay=1 kgdboc=ttyS2,115200n8 usbcore.autosuspend=-1 8250.nr_uarts=6 printk.time=1'
+
+# Now booting correctly with ramdisk and initrd:
+#setenv bootargs 'console=ttyS2,115200n8 ramdisk_size=81920 root=/dev/ram0 rw rootfstype=ext2 initrd=0x81600000,19M rw rootwait rootdelay=1 kgdboc=ttyS2,115200n8 usbcore.autosuspend=-1 8250.nr_uarts=6 printk.time=1'
+
+
+echo ============================================================
+echo Running the Ram and Nand tests 
+diag memory RAMtest
+diagnose memory nand
+#echo ============================================================
+#echo Run the ITBOK tests now. When you exit, the test kernel
+#echo will boot and then run bug_test_mistral.sh
+#echo ============================================================
+#itbok
+
+#echo loading test kernel
+#fatload mmc 0:1 0x80000000 uImage
+#echo loading initrd
+#fatload mmc 0:1 0x81600000 ramdisk.gz
+#echo booting test kernel
+#bootm 0x80000000'
+mmcinit
+echo setting nand ecc hw
+nand ecc hw
+echo erasing 0x0 0x80000
+nand erase 0x0 0x80000
+echo reading x-loader (x-load.bin.ift)
+fatload mmc 0:1 0x82000000 x-load.bin.ift
+echo writing x-loader to nand
+nand write 0x82000000 0x0 0x80000
+echo setting nand ecc sw
+nand ecc sw
+echo erasing 0x80000 0x160000
+nand erase 0x80000 0x160000
+echo reading u-boot (pu-boot.bin)
+fatload mmc 0:1 0x82000000 pu-boot.bin
+echo writing u-boot to nand
+nand write 0x82000000 0x80000 0x160000
+#echo setting boot sequence and args
+reset

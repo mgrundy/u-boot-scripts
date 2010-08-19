@@ -1,0 +1,57 @@
+echo ============================================================
+echo Running initial setup
+echo ============================================================
+echo running mmcinit
+mmcinit 
+echo setting nand ecc hw
+nand ecc hw 
+echo erasing 0x0 0x80000
+nand erase 0x0 0x80000 
+echo reading x-loader (pxload.ift)
+fatload mmc 0:1 0x82000000 pxload.ift
+echo writing x-loader to nand 
+nand write 0x82000000 0x0 0x80000 
+echo setting nand ecc sw
+nand ecc sw 
+echo erasing 0x80000 0x160000
+nand erase 0x80000 0x160000 
+echo reading u-boot (puboot.bin)
+fatload mmc 0:1 0x82000000 puboot.bin 
+echo writing u-boot to nand
+nand write 0x82000000 0x80000 0x160000 
+echo setting boot sequence and args
+setenv androidargs 'setenv bootargs androidboot.console=ttyS2 console=tty0 console=ttyS2,115200n8 root=/dev/mmcblk0p2 rw init=/init rootwait omapfb.video_mode=640x480MR-16@60 kgdboc=${console}'
+setenv baudrate '115200'
+setenv bootargs 'console=ttyS2,115200n8 root=/dev/mmcblk0p1 rw rootwait rootdelay=1 kgdboc=ttyS2,115200n8 usbcore.autosuspend=-1 8250.nr_uarts=6 printk.time=1'
+setenv bootcmd 'run mmcboot'
+setenv bootdelay '3'
+setenv console 'ttyS2,115200n8'
+setenv gatewayip '192.168.1.1'
+setenv ipaddr '192.168.1.10'
+setenv mmcargs 'setenv bootargs console=${console} root=/dev/mmcblk0p1 rw rootwait rootdelay=1 kgdboc=${console} usbcore.autosuspend=-1 printk.time=1'
+setenv mmcboot 'mmc init;ext2load mmc 0:1 0x80000000 /boot/uImage;run mmcargs;bootm 0x80000000'
+setenv netmask '255.255.255.0'
+setenv preboot ''
+setenv serverip '192.168.1.20'
+setenv stderr 'serial'
+setenv stdin 'serial'
+setenv stdout 'serial'
+setenv loadaddr
+setenv usbtty 
+setenv vram 
+setenv dvimode 
+setenv defaultdisplay 
+setenv mmcroot 
+setenv mmcrootfstype 
+setenv nandroot 
+setenv nandrootfstype 
+setenv nandargs 
+setenv loadbootscript
+setenv bootscript
+setenv loaduimage
+setenv nandboot
+setenv bootkernel
+setenv bootkernel_1
+echo Saving Normal Configuration
+saveenv
+
